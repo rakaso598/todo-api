@@ -37,12 +37,8 @@ app.get("/tasks/:id", (req, res) => {
   res.send(task);
 });
 
-app.listen(3001, () => {
-  console.log("server stated!");
-});
-
 // POST: req.body
-app.post("/tasks", () => {
+app.post("/tasks", (req, res) => {
   const newTask = req.body;
 
   const ids = tasks.map((task) => task.id); // [1,2,3,4,5]
@@ -53,4 +49,8 @@ app.post("/tasks", () => {
   tasks.push(newTask);
 
   res.status(201).send(newTask); // 201 created
+});
+
+app.listen(3001, () => {
+  console.log("server stated!");
 });
