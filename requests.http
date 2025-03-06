@@ -5,3 +5,8 @@ GET http://localhost:3001/tasks
 GET http://localhost:3001/tasks?sort=oldest&count=3
 
 ###
+
+GET http://localhost:3001/tasks/1
+
+###
+

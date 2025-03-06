@@ -2,7 +2,9 @@ import express from "express";
 import tasks from "./data/mock.js";
 
 const app = express();
+app.use(express.json());
 
+// 쿼리스트링
 app.get("/tasks", (req, res) => {
   const sort = req.query.sort;
   const count = Number(req.query.count);
@@ -19,6 +21,18 @@ app.get("/tasks", (req, res) => {
   }
 
   res.send(newTasks);
+});
+
+// 파라미터
+app.get("/tasks/:id", (req, res) => {
+  const id = Number(req.params.id);
+  const task = tasks.find((task) => task.id === id);
+
+  if (!task) {
+    res.status(404).send({ message: "Cannot find given id" });
+  }
+
+  res.send(task);
 });
 
 app.listen(3001, () => {
