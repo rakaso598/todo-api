@@ -9,6 +9,17 @@ const asyncHandler = (handler) => {
     try {
       await handler(req, res);
     } catch (e) {
+      switch (e.name) {
+        case "ValidationError":
+          res.status(400).send({ message: e.message });
+          break;
+        case "CastError":
+          res.status(404).send({ message: "cannot find given id" });
+          break;
+        default:
+          res.status(500).send({ message: e.message });
+          break;
+      }
       console.log(e.name);
       console.log(e.message);
     }
