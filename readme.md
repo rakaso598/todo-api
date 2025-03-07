@@ -20,22 +20,22 @@ MongoDB Atlas를 데이터베이스로 사용하고, Mongoose 라이브러리를
 ### Task 상세 조회 (GET /tasks/:id)
 
 - 특정 ID의 Task 상세 정보를 조회합니다.
-- Mock 데이터에서 데이터를 가져옵니다.
+- MongoDB Atlas에서 데이터를 가져옵니다.
 
 ### Task 생성 (POST /tasks)
 
 - 새로운 Task를 생성합니다.
-- Mock 데이터에 데이터를 추가합니다.
+- MongoDB Atlas에 데이터를 추가합니다.
 
 ### Task 수정 (PATCH /tasks/:id)
 
 - 특정 ID의 Task 정보를 수정합니다.
-- Mock 데이터의 데이터를 수정합니다.
+- MongoDB Atlas의 데이터를 수정합니다.
 
 ### Task 삭제 (DELETE /tasks/:id)
 
 - 특정 ID의 Task를 삭제합니다.
-- Mock 데이터의 데이터를 삭제합니다.
+- MongoDB Atlas의 데이터를 삭제합니다.
 
 ---
 
