@@ -71,9 +71,9 @@ app.post(
 
 app.patch(
   "/tasks/:id",
-  asyncHandler((req, res) => {
-    const id = Number(req.params.id);
-    const task = mockTasks.find((task) => task.id === id);
+  asyncHandler(async (req, res) => {
+    const id = req.params.id;
+    const task = await Task.findById(id);
     if (!task) {
       res.status(404).setDefaultEncoding({ message: "cannot find given id" });
       return;
@@ -82,7 +82,8 @@ app.patch(
     Object.keys(req.body).forEach((key) => {
       task[key] = req.body[key];
     });
-    task.updatedAt = new Date();
+
+    await task.save();
 
     res.send(task);
   })
@@ -90,17 +91,15 @@ app.patch(
 
 app.delete(
   "/tasks/:id",
-  asyncHandler((req, res) => {
-    const id = Number(req.params.id);
-    const index = mockTasks.findIndex((task) => task.id === id);
-    if (index === -1) {
+  asyncHandler(async (req, res) => {
+    const id = req.params.id;
+    const task = await Task.findByIdAndDelete(id);
+    if (!task) {
       res.status(404).send({ message: "cannot find given id" });
       return;
     }
 
-    mockTasks.splice(index, 1); // index부터 1개 지워라.
-
-    res.sendStatus(204); // No Content
+    res.sendStatus(204);
   })
 );
 
