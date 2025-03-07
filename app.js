@@ -51,3 +51,46 @@ app.post("/tasks", (req, res) => {
 app.listen(3000, () => {
   console.log("Server started");
 });
+
+// app.patch("/tasks/:id", (req, res) => {
+//   const id = Number(req.params.id);
+//   const newComplete = req.body.isComplete;
+
+//   const updatedTasks = tasks.map((task) => {
+//     if (id === task.id) {
+//       return { ...task, isComplete: newComplete };
+//     }
+//     return task;
+//   });
+
+//   res.status(200).send(updatedTasks);
+// });
+
+app.patch("/tasks/:id", (req, res) => {
+  const id = Number(req.params.id);
+  const task = tasks.find((task) => task.id === id);
+  if (!task) {
+    res.status(404).setDefaultEncoding({ message: "cannot find given id" });
+    return;
+  }
+
+  Object.keys(req.body).forEach((key) => {
+    task[key] = req.body[key];
+  });
+  task.updatedAt = new Date();
+
+  res.send(task);
+});
+
+app.delete("/tasks/:id", (req, res) => {
+  const id = Number(req.params.id);
+  const index = tasks.findIndex((task) => task.id === id);
+  if (index === -1) {
+    res.status(404).send({ message: "cannot find given id" });
+    return;
+  }
+
+  tasks.splice(index, 1); // index부터 1개 지워라.
+
+  res.sendStatus(204); // 응답으로 돌려줄 내용이없음
+});

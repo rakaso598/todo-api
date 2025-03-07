@@ -17,3 +17,20 @@ Content-Type: application/json
   "title": "강아지 산책",
   "description": "강아지랑 30분 산책하기"
 }
+
+###
+
+PATCH http://localhost:3000/tasks/1
+Content-Type: application/json
+
+{
+  "isComplete": true
+}
+
+###
+
+Get http://localhost:3000/tasks/1
+
+###
+
+DELETE http://localhost:3000/tasks/3
