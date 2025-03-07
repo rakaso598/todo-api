@@ -1,34 +1,29 @@
 import express from "express";
-import tasks from "./data/mock.js";
+import mockTasks from "./data/mock.js";
 import mongoose from "mongoose";
 import { DATABASE_URL } from "./env.js";
+import { Task } from "./models/Task.js";
 
 const app = express();
 app.use(express.json()); // -> 미들웨어 middleware
 // express.json(): 헤더의 content-type이 application/json이라면 body를 파싱해주는 미들웨어.
-// req.body
 
-app.get("/tasks", (req, res) => {
+app.get("/tasks", async (req, res) => {
   const sort = req.query.sort;
-  const count = Number(req.query.count);
+  const count = Number(req.query.count) || 0;
 
-  const compareFn =
-    sort === "oldest"
-      ? (a, b) => a.createdAt - b.createdAt
-      : (a, b) => b.createdAt - a.createdAt;
+  const sortOption = {
+    createdAt: sort === "oldest" ? "asc" : "desc",
+  };
 
-  let newTasks = tasks.sort(compareFn);
+  const tasks = await Task.find().sort(sortOption).limit(count);
 
-  if (count) {
-    newTasks = newTasks.slice(0, count);
-  }
-
-  res.send(newTasks);
+  res.send(tasks);
 });
 
 app.get("/tasks/:id", (req, res) => {
   const id = Number(req.params.id);
-  const task = tasks.find((task) => task.id === id);
+  const task = mockTasks.find((task) => task.id === id);
 
   if (!task) {
     res.status(404).send({ message: "Cannot find given id" });
@@ -40,19 +35,19 @@ app.get("/tasks/:id", (req, res) => {
 app.post("/tasks", (req, res) => {
   const newTask = req.body;
 
-  const ids = tasks.map((task) => task.id); // [1,2,3,4,5]
+  const ids = mockTasks.map((task) => task.id); // [1,2,3,4,5]
   newTask.id = Math.max(...ids) + 1;
   newTask.isComplete = false;
   newTask.createdAt = new Date();
   newTask.updatedAt = new Date();
-  tasks.push(newTask);
+  mockTasks.push(newTask);
 
   res.status(201).send(newTask);
 });
 
 app.patch("/tasks/:id", (req, res) => {
   const id = Number(req.params.id);
-  const task = tasks.find((task) => task.id === id);
+  const task = mockTasks.find((task) => task.id === id);
   if (!task) {
     res.status(404).setDefaultEncoding({ message: "cannot find given id" });
     return;
@@ -68,13 +63,13 @@ app.patch("/tasks/:id", (req, res) => {
 
 app.delete("/tasks/:id", (req, res) => {
   const id = Number(req.params.id);
-  const index = tasks.findIndex((task) => task.id === id);
+  const index = mockTasks.findIndex((task) => task.id === id);
   if (index === -1) {
     res.status(404).send({ message: "cannot find given id" });
     return;
   }
 
-  tasks.splice(index, 1); // index부터 1개 지워라.
+  mockTasks.splice(index, 1); // index부터 1개 지워라.
 
   res.sendStatus(204); // No Content
 });
