@@ -5,6 +5,12 @@ const TaskSchema = new mongoose.Schema(
   {
     title: {
       type: String,
+      required: true,
+      maxLength: 30,
+      validate: {
+        validator: (title) => title.split(" ").length > 1,
+        message: "2단어 이상 입력하세요.",
+      },
     },
     description: {
       type: String,
@@ -12,6 +18,7 @@ const TaskSchema = new mongoose.Schema(
     isComplete: {
       type: Boolean,
       default: false,
+      required: true,
     },
   },
   {

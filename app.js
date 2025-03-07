@@ -32,17 +32,10 @@ app.get("/tasks/:id", async (req, res) => {
   res.send(task);
 });
 
-app.post("/tasks", (req, res) => {
-  const newTask = req.body;
+app.post("/tasks", async (req, res) => {
+  const task = await Task.create(req.body);
 
-  const ids = mockTasks.map((task) => task.id); // [1,2,3,4,5]
-  newTask.id = Math.max(...ids) + 1;
-  newTask.isComplete = false;
-  newTask.createdAt = new Date();
-  newTask.updatedAt = new Date();
-  mockTasks.push(newTask);
-
-  res.status(201).send(newTask);
+  res.status(201).send(task);
 });
 
 app.patch("/tasks/:id", (req, res) => {
