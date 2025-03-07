@@ -21,9 +21,9 @@ app.get("/tasks", async (req, res) => {
   res.send(tasks);
 });
 
-app.get("/tasks/:id", (req, res) => {
-  const id = Number(req.params.id);
-  const task = mockTasks.find((task) => task.id === id);
+app.get("/tasks/:id", async (req, res) => {
+  const id = req.params.id;
+  const task = await Task.findById(id);
 
   if (!task) {
     res.status(404).send({ message: "Cannot find given id" });
