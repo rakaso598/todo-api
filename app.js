@@ -1,5 +1,7 @@
 import express from "express";
 import tasks from "./data/mock.js";
+import mongoose from "mongoose";
+import { DATABASE_URL } from "./env.js";
 
 const app = express();
 app.use(express.json()); // -> 미들웨어 middleware
@@ -48,24 +50,6 @@ app.post("/tasks", (req, res) => {
   res.status(201).send(newTask);
 });
 
-app.listen(3000, () => {
-  console.log("Server started");
-});
-
-// app.patch("/tasks/:id", (req, res) => {
-//   const id = Number(req.params.id);
-//   const newComplete = req.body.isComplete;
-
-//   const updatedTasks = tasks.map((task) => {
-//     if (id === task.id) {
-//       return { ...task, isComplete: newComplete };
-//     }
-//     return task;
-//   });
-
-//   res.status(200).send(updatedTasks);
-// });
-
 app.patch("/tasks/:id", (req, res) => {
   const id = Number(req.params.id);
   const task = tasks.find((task) => task.id === id);
@@ -92,5 +76,11 @@ app.delete("/tasks/:id", (req, res) => {
 
   tasks.splice(index, 1); // index부터 1개 지워라.
 
-  res.sendStatus(204); // 응답으로 돌려줄 내용이없음
+  res.sendStatus(204); // No Content
+});
+
+mongoose.connect(DATABASE_URL).then(() => console.log("Mongoose Connected!"));
+
+app.listen(3000, () => {
+  console.log("Server Started!");
 });
