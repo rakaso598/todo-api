@@ -2,11 +2,10 @@ import express from "express";
 import tasks from "./data/mock.js";
 
 const app = express();
-app.use(express.json()); // middleware
+app.use(express.json()); // -> 미들웨어 middleware
 // express.json(): 헤더의 content-type이 application/json이라면 body를 파싱해주는 미들웨어.
 // req.body
 
-// 쿼리스트링: req.query
 app.get("/tasks", (req, res) => {
   const sort = req.query.sort;
   const count = Number(req.query.count);
@@ -25,7 +24,6 @@ app.get("/tasks", (req, res) => {
   res.send(newTasks);
 });
 
-// 파라미터: req.params
 app.get("/tasks/:id", (req, res) => {
   const id = Number(req.params.id);
   const task = tasks.find((task) => task.id === id);
@@ -37,7 +35,6 @@ app.get("/tasks/:id", (req, res) => {
   res.send(task);
 });
 
-// POST: req.body
 app.post("/tasks", (req, res) => {
   const newTask = req.body;
 
@@ -48,9 +45,9 @@ app.post("/tasks", (req, res) => {
   newTask.updatedAt = new Date();
   tasks.push(newTask);
 
-  res.status(201).send(newTask); // 201 created
+  res.status(201).send(newTask);
 });
 
-app.listen(3001, () => {
-  console.log("server stated!");
+app.listen(3000, () => {
+  console.log("Server started");
 });
